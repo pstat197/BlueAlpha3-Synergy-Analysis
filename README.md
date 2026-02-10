@@ -2,7 +2,7 @@
 
 ### Overview
 
-Project building a synergy analysis framework by integrating channel interactions into marketing mix models. Facilitated by the University of California, Santa Barbara, Data Science Capstone and mentored by BlueAlpha.
+Project building a synergy analysis framework by integrating channel interactions into marketing mix models. Facilitated by the University of California, Santa Barbara, Data Science Capstone, and mentored by BlueAlpha.
 
 ### Contributors
 
@@ -14,11 +14,12 @@ This project explores novel marketing mix models that challenge the classical as
 
 ## Repository Contents
 
-- `data/`  
-  - `monthly_mocha.csv`: contains the toy dataset which is used in `\scripts\correlation_analysis.ipynb`.
- 
-- `scripts/`  
-  - `correlation_analysis.ipynb`: notebook used to perform correlation analysis that explores potential channel pairs through heatmaps and residuals.
+- `correlation_analysis/`  
+  - `data/`  
+    - `monthly_mocha.csv`: contains the toy dataset, which is used in `scripts/correlation_analysis.ipynb`.
+   
+  - `scripts/`  
+    - `correlation_analysis.ipynb`: notebook used to perform correlation analysis that explores potential channel pairs through heatmaps and residuals.
 
 ## References
 
