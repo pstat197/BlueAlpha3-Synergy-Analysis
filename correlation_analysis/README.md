@@ -21,11 +21,6 @@ Python module utilizing correlation analysis to explore statistical dependency i
   - LiveIntent and BeeHiiv
 - Observed correlations in lagged residuals
 
-### Next Steps
-- Apply Granger causality tests and lagged time series analysis to potential pairs
-- Formulate a list of channel pairs ranked by strength
-- Calculate confidence intervals to communicate uncertainty
-
 ### How to Run
 1) Run `correlation_analysis.ipynb`.
 
@@ -33,5 +28,7 @@ Python module utilizing correlation analysis to explore statistical dependency i
 - `data/monthly_mocha.csv`: toy dataset
 - `scripts/correlation_analysis.ipynb`: notebook containing correlation analysis
 
-### Next
-- Introduce new models; validate with TensorBoard/MLFlow/etc..
+### Next Steps
+- Apply Granger causality tests and lagged time series analysis to potential pairs
+- Formulate a list of channel pairs ranked by strength
+- Calculate confidence intervals to communicate uncertainty
