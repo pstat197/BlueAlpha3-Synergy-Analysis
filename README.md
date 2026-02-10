@@ -14,12 +14,12 @@ This project explores novel marketing mix models that challenge the classical as
 
 ## Repository Contents
 
-- `correlation_analysis/`  
+- `correlation_analysis/`: pedagogical correlation analysis module identifying dependent channel pairs.
   - `data/`  
     - `monthly_mocha.csv`: contains the toy dataset, which is used in `scripts/correlation_analysis.ipynb`.
    
   - `scripts/`  
-    - `correlation_analysis.ipynb`: notebook used to perform correlation analysis that explores potential channel pairs through heatmaps and residuals.
+    - `correlation_analysis.ipynb`: notebook used to perform correlation analysis using heatmaps and residuals.
 
 ## References
 
