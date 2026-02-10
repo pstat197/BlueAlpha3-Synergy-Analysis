@@ -2,7 +2,7 @@
 
 ### Overview
 
-Project building a synergy analysis framework by integrating channel interactions into marketing mix models. Facilitated by the University of California, Santa Barbara, Data Science Capstone, and mentored by BlueAlpha.
+Project building a synergy analysis framework by integrating channel interactions into marketing mix models. Facilitated by the University of California, Santa Barbara Data Science Capstone, and mentored by BlueAlpha.
 
 ### Contributors
 
