@@ -1,26 +1,34 @@
-# BlueAlpha 3 Synergy Analysis
+# Correlation Analysis
+
+Python module utilizing correlation analysis to explore statistical dependency in marketing channels. 
 
 ### Overview
+- Goal: perform simple correlation analysis on a toy dataset to develop an understanding of channel interactions, and create a working list of channel pairs for later, more sophisticated analysis.
+- Stack: Python, Jupyter notebook.
 
-Project building a synergy analysis framework by integrating channel interactions into marketing mix models. Facilitated by the University of California, Santa Barbara Data Science Capstone, and mentored by BlueAlpha.
+### Dataset
+- Source: BlueAlpha toy dataset
 
-### Contributors
+### Methods
+- Preprocessing: filter out zero-spend channels.
+- Modeling: OLS and Ridge with SciKit-Learn.
 
-Brooks Piper, Alex Morifusa, Alex Dieter, Bahaar Ahuja, Sam Caruthers
+### Results (highlights)
+- Identified potential channel pairs:
+  - Meta and LiveIntent
+  - Google and Beehiiv
+  - Snapchat and TikTok
+  - LiveIntent and BeeHiiv
+- Observed correlations in lagged residuals
 
-### Abstract
+### How to Run
+1) Run `correlation_analysis.ipynb`.
 
-This project explores novel marketing mix models that challenge the classical assumption that marketing channels are independent. At its core, it seeks to formulate a channel interaction report-generating tool that provides data-driven budget recommendations for marketing campaigns based on synergistic and cannibalistic relationships. To do so, we employ an array of methods from correlation analysis to Bayesian modeling.
+### Structure
+- `data/monthly_mocha.csv`: toy dataset
+- `scripts/correlation_analysis.ipynb`: notebook containing correlation analysis
 
-## Repository Contents
-
-- `correlation_analysis/`: pedagogical correlation analysis module identifying dependent channel pairs.
-  - `data/`  
-    - `monthly_mocha.csv`: contains the toy dataset, which is used in `scripts/correlation_analysis.ipynb`.
-   
-  - `scripts/`  
-    - `correlation_analysis.ipynb`: notebook used to perform correlation analysis using heatmaps and residuals.
-
-## References
-
-To be populated later.
+### Next Steps
+- Apply Granger causality tests and lagged time series analysis to potential pairs
+- Formulate a list of channel pairs ranked by strength
+- Calculate confidence intervals to communicate uncertainty
