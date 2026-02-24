@@ -24,10 +24,6 @@ spend_cols = [col for col in df.columns if 'spend' in col]
 #print("\nSpend Columns:")
 #print(spend_cols)
 
-# =============================================================================
-# OPTIONAL: STANDARDIZE DATA (Recommended for correlation analysis)
-# =============================================================================
-
 df_std = df.copy()
 
 cols_to_scale = spend_cols + [target]
