@@ -104,7 +104,8 @@ plt.xlabel("Lag")
 plt.ylabel("Channel")
 
 plt.tight_layout()
-plt.show(block=True)
 
 plt.savefig("lagged_heatmap.png", dpi=300)
 print("Heatmap saved as lagged_heatmap.png")
+
+plt.show()
