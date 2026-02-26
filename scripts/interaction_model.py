@@ -113,4 +113,7 @@ print("Saved: partial_r2_interactions.png")
 plt.show()
 
 # After including the interaction terms, the model achieved an R² of 0.845 (Adjusted R² = 0.808), meaning it explains about 84.5% of the variation in subscriptions. This is a modest improvement over the main-effects-only model, suggesting that adding interactions does capture some additional cross-channel behavior. When ranking the interaction terms by absolute coefficient size, the largest effects appear for Beehiiv × Google (−737), Beehiiv × LiveIntent (+612), and LiveIntent × Meta (−250). However, once we examine the confidence intervals, only the Beehiiv × LiveIntent interaction remains statistically significant at the 95% level, indicating clear positive synergy between those two channels. The Beehiiv × Google and LiveIntent × Meta effects are fairly large in magnitude, but their intervals cross zero, so they should be interpreted as suggestive rather than definitive evidence of cannibalization or diminishing returns. The remaining interaction terms are relatively small and highly uncertain. Overall, this suggests that while several channel pairs show directional interaction signals, Beehiiv and LiveIntent stand out as the only pairing with strong and statistically reliable cross-channel lift in this dataset.
-
+# To quantify practical importance beyond coefficient size, we computed Partial R² (ΔR²): the drop in R² when each interaction is removed.
+Beehiiv × LiveIntent contributes the largest incremental explanatory power (ΔR² ≈ 0.0126),
+followed by Beehiiv × Google (ΔR² ≈ 0.0086) and LiveIntent × Meta (ΔR² ≈ 0.0086).
+The remaining interactions contribute near-zero incremental fit. 
