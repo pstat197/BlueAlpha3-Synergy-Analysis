@@ -122,7 +122,14 @@ try:
     sns.heatmap(corr, annot=False, center=0)
     plt.title("Correlation Heatmap (Channel Levels)")
     plt.tight_layout()
+
+# Save for GitHub
+
+    plt.savefig("correlation_heatmap.png", dpi=300, bbox_inches="tight")
+
     plt.show()
+    plt.close()
+
 except Exception as e:
     print("\n[Heatmap skipped] seaborn/matplotlib not available or error:", e)
 
@@ -161,7 +168,12 @@ try:
     plt.title("Granger Network (driver → target), labeled by best lag")
     plt.axis("off")
     plt.tight_layout()
+
+# Save for GitHub
+    plt.savefig("granger_network.png", dpi=300, bbox_inches="tight")
+
     plt.show()
+    plt.close()
 except Exception as e:
     print("\n[Network graph skipped] networkx/matplotlib not available or error:", e)
 
