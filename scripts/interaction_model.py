@@ -116,3 +116,11 @@ plt.show()
 # To quantify practical importance beyond coefficient size, we computed Partial R² (ΔR²): the drop in R² when each interaction is removed.
 # Beehiiv × LiveIntent contributes the largest incremental explanatory power (ΔR² ≈ 0.0126), followed by Beehiiv × Google (ΔR² ≈ 0.0086) and LiveIntent × Meta (ΔR² ≈ 0.0086).
 # The remaining interactions contribute near-zero incremental fit. 
+
+interaction_summary.index.name = "interaction"
+interaction_summary.to_csv("interaction_strength_figs/interaction_effects.csv")
+
+partial_r2_df.to_csv("interaction_strength_figs/interaction_partial_r2.csv", index=False)
+
+print("Saved: interaction_strength_figs/interaction_effects.csv")
+print("Saved: interaction_strength_figs/interaction_partial_r2.csv")
