@@ -124,3 +124,16 @@ partial_r2_df.to_csv("interaction_strength_figs/interaction_partial_r2.csv", ind
 
 print("Saved: interaction_strength_figs/interaction_effects.csv")
 print("Saved: interaction_strength_figs/interaction_partial_r2.csv")
+
+# Create a clean Confidence Interval table
+ci_table = results.params[interaction_terms].to_frame(name='coefficient')
+ci_bounds = results.conf_int().loc[interaction_terms]
+ci_table['lower_95'] = ci_bounds[0]
+ci_table['upper_95'] = ci_bounds[1]
+
+# Calculate significance (True if it doesn't cross zero)
+ci_table['is_significant'] = ~((ci_table['lower_95'] < 0) & (ci_table['upper_95'] > 0))
+
+# Save to a new CSV
+ci_table.to_csv("interaction_strength_figs/interaction_ci_clean.csv")
+print("Saved: interaction_strength_figs/interaction_ci_clean.csv")
