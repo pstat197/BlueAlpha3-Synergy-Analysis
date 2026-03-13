@@ -126,14 +126,17 @@ print("Saved: interaction_strength_figs/interaction_effects.csv")
 print("Saved: interaction_strength_figs/interaction_partial_r2.csv")
 
 # Create a clean Confidence Interval table
-ci_table = results.params[interaction_terms].to_frame(name='coefficient')
-ci_bounds = results.conf_int().loc[interaction_terms]
+# Changed 'results' to 'model' to match your variable above
+ci_table = model.params[interaction_terms].to_frame(name='coefficient')
+ci_bounds = model.conf_int().loc[interaction_terms]
+
 ci_table['lower_95'] = ci_bounds[0]
 ci_table['upper_95'] = ci_bounds[1]
 
 # Calculate significance (True if it doesn't cross zero)
 ci_table['is_significant'] = ~((ci_table['lower_95'] < 0) & (ci_table['upper_95'] > 0))
 
-# Save to a new CSV
+# Save to a new CSV (using the same directory as your other figs)
 ci_table.to_csv("interaction_strength_figs/interaction_ci_clean.csv")
+
 print("Saved: interaction_strength_figs/interaction_ci_clean.csv")
