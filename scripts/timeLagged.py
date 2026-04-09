@@ -5,6 +5,10 @@ import seaborn as sns
 from scipy.stats import pearsonr
 from statsmodels.stats.multitest import multipletests
 
+import os
+
+OUTPUT_DIR = "interaction_strength_figs"
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # Load Data
 
@@ -134,7 +138,7 @@ plt.ylabel("Channel")
 
 plt.tight_layout()
 
-plt.savefig("lagged_heatmap.png", dpi=300, bbox_inches="tight")
-print("Heatmap saved as lagged_heatmap.png")
+HEATMAP_PATH = os.path.join(OUTPUT_DIR, "lagged_heatmap.png")
+plt.savefig(HEATMAP_PATH, dpi=300, bbox_inches="tight")
 
 plt.show()
