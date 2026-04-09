@@ -1,4 +1,5 @@
 # Import dependencies
+import os
 import pandas as pd
 import numpy as np
 from statsmodels.tsa.stattools import grangercausalitytests
@@ -75,6 +76,10 @@ summary_df = (
            .rename(columns={"p_value": "min_pvalue", "lag": "best_lag"})
 )
 
+# Correct for choosing the minimum p-value across 3 lags within each pair
+n_lags_tested = 3
+summary_df["min_pvalue_bonf"] = (summary_df["min_pvalue"] * n_lags_tested).clip(upper=1.0)
+
 # ---------- 3) Multiple testing correction (Benjamini-Hochberg / FDR) ----------
 def fdr_bh(pvals: np.ndarray) -> np.ndarray:
     """
@@ -93,8 +98,9 @@ def fdr_bh(pvals: np.ndarray) -> np.ndarray:
     out[order] = q
     return out
 
-summary_df["fdr_qvalue"] = fdr_bh(summary_df["min_pvalue"].values)
+summary_df["fdr_qvalue"] = fdr_bh(summary_df["min_pvalue_bonf"].values)
 summary_df["sig_p05"] = summary_df["min_pvalue"] < 0.05
+summary_df["sig_bonf_05"] = summary_df["min_pvalue_bonf"] < 0.05
 summary_df["sig_fdr_05"] = summary_df["fdr_qvalue"] < 0.05
 
 # Sort for convenience (smallest q-values first)
@@ -106,9 +112,9 @@ print(summary_df_sorted.head(30))
 print("\n=== Significant after FDR (q < 0.05) ===")
 print(summary_df_sorted[summary_df_sorted["sig_fdr_05"]].head(100))
 
-# Optional: save outputs for teammates
-summary_df_sorted.to_csv("granger_summary_with_fdr.csv", index=False)
-print("\nSaved: granger_summary_with_fdr.csv")
+os.makedirs("interaction_strength_figs", exist_ok=True)
+summary_df_sorted.to_csv("interaction_strength_figs/granger_summary_with_fdr.csv", index=False)
+print("\nSaved: interaction_strength_figs/granger_summary_with_fdr.csv")
 
 # ---------- 4) Simple correlation heatmap (original levels, not differenced) ----------
 # (This is "do channels move together at the same time?")
@@ -125,7 +131,8 @@ try:
 
 # Save for GitHub
 
-    plt.savefig("correlation_heatmap.png", dpi=300, bbox_inches="tight")
+    os.makedirs("interaction_strength_figs", exist_ok=True)
+    plt.savefig("interaction_strength_figs/correlation_heatmap.png", dpi=300, bbox_inches="tight")
 
     plt.show()
     plt.close()
@@ -170,7 +177,8 @@ try:
     plt.tight_layout()
 
 # Save for GitHub
-    plt.savefig("granger_network.png", dpi=300, bbox_inches="tight")
+    os.makedirs("interaction_strength_figs", exist_ok=True)
+    plt.savefig("interaction_strength_figs/granger_network.png", dpi=300, bbox_inches="tight")
 
     plt.show()
     plt.close()
@@ -179,6 +187,8 @@ except Exception as e:
 
 # ---------- 6) (Optional) Quick table to paste into notes/slides ----------
 # This is a compact view of the "top relationships"
-top_for_notes = summary_df_sorted.head(15)[["driver", "target", "best_lag", "min_pvalue", "fdr_qvalue", "sig_fdr_05"]]
+top_for_notes = summary_df_sorted.head(15)[[
+    "driver", "target", "best_lag", "min_pvalue", "min_pvalue_bonf", "fdr_qvalue", "sig_fdr_05"
+]]
 print("\n=== Top relationships (for meeting notes) ===")
 print(top_for_notes.to_string(index=False))
