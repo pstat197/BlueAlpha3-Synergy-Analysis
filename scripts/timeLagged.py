@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import pearsonr
+from statsmodels.stats.multitest import multipletests
 
 
 # Load Data
@@ -20,6 +21,11 @@ df = df.sort_values('date').reset_index(drop=True)
 
 target = 'subscriptions'
 spend_cols = [col for col in df.columns if 'spend' in col]
+
+spend_cols = [
+    col for col in spend_cols
+    if df[col].std() > 0
+]
 
 #print("\nSpend Columns:")
 #print(spend_cols)
@@ -71,16 +77,39 @@ lag_results = calculate_lagged_correlation(
     max_lag=6
 )
 
+lag_results['p_value_adj'] = np.nan
+lag_results['significant'] = False
+
+for channel in lag_results['channel'].unique():
+    mask = lag_results['channel'] == channel
+    
+    pvals = lag_results.loc[mask, 'p_value']
+    
+    rejected, pvals_corrected, _, _ = multipletests(
+        pvals, method='fdr_bh'
+    )
+    
+    lag_results.loc[mask, 'p_value_adj'] = pvals_corrected
+    lag_results.loc[mask, 'significant'] = rejected
+
 #print("\nLagged Correlation Results:")
 #print(lag_results.head())
 
 # Best Lag Per Channel
 
-best_lags = (
-    lag_results
-    .loc[lag_results.groupby('channel')['correlation'].apply(lambda x: x.abs().idxmax())]
-    .reset_index(drop=True)
-)
+best_lags_list = []
+
+for channel in lag_results['channel'].unique():
+    df_channel = lag_results[lag_results['channel'] == channel]
+    sig = df_channel[df_channel['significant'] == True]
+    if not sig.empty:
+        best_idx = sig['correlation'].abs().idxmax()
+    else:
+        best_idx = df_channel['correlation'].abs().idxmax()
+    
+    best_lags_list.append(lag_results.loc[best_idx])
+
+best_lags = pd.DataFrame(best_lags_list).reset_index(drop=True)
 
 print("\nBest Lag Per Channel:")
 print(best_lags)
