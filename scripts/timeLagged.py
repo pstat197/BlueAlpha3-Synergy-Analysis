@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -16,13 +17,19 @@ df = df.sort_values('date').reset_index(drop=True)
 #print("Data shape:", df.shape)
 #print("Columns:", list(df.columns))
 
-# Select Variables
+target = "subscriptions"
 
-target = 'subscriptions'
-spend_cols = [col for col in df.columns if 'spend' in col]
+# Drop impression columns so this matches the other scripts
+df = df[[c for c in df.columns if not c.endswith("_impressions")]]
 
-#print("\nSpend Columns:")
-#print(spend_cols)
+# Keep only spend columns
+spend_cols = [col for col in df.columns if col.endswith("_spend")]
+
+# Remove all-zero spend columns
+spend_cols = [col for col in spend_cols if (df[col] != 0).any()]
+
+print("\nUsing spend columns:")
+print(spend_cols)
 
 df_std = df.copy()
 
@@ -71,10 +78,16 @@ lag_results = calculate_lagged_correlation(
     max_lag=6
 )
 
+# Bonferroni correction across the 7 tested lags (0 through 6)
+n_lags_tested = 7
+lag_results["p_value_adj"] = (lag_results["p_value"] * n_lags_tested).clip(upper=1.0)
+lag_results["sig_raw_05"] = lag_results["p_value"] < 0.05
+lag_results["sig_bonf_05"] = lag_results["p_value_adj"] < 0.05
+
 #print("\nLagged Correlation Results:")
 #print(lag_results.head())
 
-# Best Lag Per Channel
+# best lag per channel after Bonferroni adjustment
 
 best_lags = (
     lag_results
@@ -82,8 +95,15 @@ best_lags = (
     .reset_index(drop=True)
 )
 
-print("\nBest Lag Per Channel:")
-print(best_lags)
+print("\nBest Lag Per Channel (with Bonferroni-adjusted p-values):")
+print(best_lags[["channel", "lag", "correlation", "p_value", "p_value_adj", "sig_bonf_05"]])
+
+os.makedirs("interaction_strength_figs", exist_ok=True)
+best_lags.to_csv("interaction_strength_figs/best_lag_summary.csv", index=False)
+lag_results.to_csv("interaction_strength_figs/lagged_correlation_results.csv", index=False)
+
+print("Saved: interaction_strength_figs/best_lag_summary.csv")
+print("Saved: interaction_strength_figs/lagged_correlation_results.csv")
 
 # Heat Map
 
@@ -105,7 +125,7 @@ plt.ylabel("Channel")
 
 plt.tight_layout()
 
-plt.savefig("lagged_heatmap.png", dpi=300, bbox_inches="tight")
-print("Heatmap saved as lagged_heatmap.png")
+plt.savefig("interaction_strength_figs/lagged_heatmap.png", dpi=300, bbox_inches="tight")
+print("Heatmap saved as interaction_strength_figs/lagged_heatmap.png")
 
 plt.show()
