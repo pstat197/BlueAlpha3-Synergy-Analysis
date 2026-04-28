@@ -1,7 +1,5 @@
 import pandas as pd
 from find_interactions import find_interactions_func
-from statsmodels.api import OLS
-
 from statsmodels.api import OLS, add_constant
 
 def create_residualized_interactions(df):
