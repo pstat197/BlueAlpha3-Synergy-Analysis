@@ -12,24 +12,26 @@ df = df.select_dtypes(include='number')
 df = df.filter(regex='(_spend)$')
 df = df.loc[:, (df != 0).any()]
 
-def create_heatmap(df, threshold=0.3):
+def create_heatmap(df):
     # Correlation matrix
     corr_matrix = df.corr()
-
-    # Emphasize strength over direction
     corr_abs = corr_matrix.abs()
+
+    # Mask upper triangle + diagonal
+    mask = np.triu(np.ones_like(corr_abs, dtype=bool))
 
     plt.figure(figsize=(10, 8))
 
-    # Create colormap and set NaNs (masked values) to gray
+    # Colormap
     cmap = sns.light_palette("blue", as_cmap=True)
-    cmap.set_bad(color='lightgray')
 
     sns.heatmap(
         corr_abs,
+        mask=mask,
         annot=True,
         fmt=".2f",
         cmap=cmap,
+        vmin=0, vmax=1,
         annot_kws={'size': 8},
         linewidths=0.5,
         linecolor='white',
@@ -38,7 +40,8 @@ def create_heatmap(df, threshold=0.3):
 
     plt.xticks(rotation=45, ha='right')
     plt.yticks(rotation=45)
-    plt.title(f"Channel Spend Correlation Strength (|ρ| ≥ {threshold})")
+    plt.suptitle("Absolute Correlation of Channel Spend", fontsize=20)
+    plt.title("Correlated channels suggest shared marketing effort - some redundant and some synergistic", fontsize=12)
 
     plt.tight_layout()
     plt.show()
