@@ -40,12 +40,3 @@ def create_residualized_interactions(df):
         residualized[col_name] = model.resid
 
     return residualized
-
-df = pd.read_csv(
-  "https://raw.githubusercontent.com/pstat197/BlueAlpha3-Synergy-Analysis/refs/heads/meridian_modeling/data/monthly_mocha.csv"
-)
-df = df.loc[:, (df != 0).any()]
-
-residualized_df = create_residualized_interactions(df)
-
-print(residualized_df.head())
