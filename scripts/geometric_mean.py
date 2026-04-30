@@ -25,7 +25,7 @@ def create_geometric_mean_interactions(df):
             continue
 
         # Compute geometric mean for spend interactions
-        spend_interaction_col = f"{target}_x_{driver}_geom"
+        spend_interaction_col = f"{target}_x_{driver}"
         geometric_mean_interactions[spend_interaction_col] = np.sqrt(
             geometric_mean_interactions[target] * geometric_mean_interactions[driver]
         )
@@ -38,18 +38,9 @@ def create_geometric_mean_interactions(df):
             continue
 
         # Compute geometric mean for impression interactions
-        impression_interaction_col = f"{target}_x_{driver}_geom"
+        impression_interaction_col = f"{target}_x_{driver}"
         geometric_mean_interactions[impression_interaction_col] = np.sqrt(
             geometric_mean_interactions[target] * geometric_mean_interactions[driver]
         )
 
     return geometric_mean_interactions
-
-df = pd.read_csv(
-  "https://raw.githubusercontent.com/pstat197/BlueAlpha3-Synergy-Analysis/refs/heads/meridian_modeling/data/monthly_mocha.csv"
-)
-df = df.loc[:, (df != 0).any()]
-
-geometric_mean_df = create_geometric_mean_interactions(df)
-
-print(geometric_mean_df.head())
