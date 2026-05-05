@@ -25,23 +25,26 @@ def create_heatmap(df):
     # Colormap
     cmap = sns.light_palette("blue", as_cmap=True)
 
-    sns.heatmap(
+    ax = sns.heatmap(
         corr_abs,
         mask=mask,
         annot=True,
         fmt=".2f",
         cmap=cmap,
         vmin=0, vmax=1,
-        annot_kws={'size': 8},
+        annot_kws={'size': 16},
         linewidths=0.5,
         linecolor='white',
         cbar_kws={'label': '|Correlation|'}
     )
+    cbar = ax.collections[0].colorbar
+    cbar.ax.tick_params(labelsize=16)
+    cbar.ax.yaxis.label.set_size(16)
 
-    plt.xticks(rotation=45, ha='right')
-    plt.yticks(rotation=45)
-    plt.suptitle("Absolute Correlation of Channel Spend", fontsize=20)
-    plt.title("Correlated channels suggest shared marketing effort - some redundant and some synergistic", fontsize=12)
+    plt.xticks(rotation=45, ha='right', fontsize=12)
+    plt.yticks(rotation=45, fontsize=12)
+    plt.suptitle("Absolute Correlation of Channel Spend", fontsize=24)
+    plt.title("Correlated channels suggest shared marketing effort - some redundant and some synergistic", fontsize=14)
 
     plt.tight_layout()
     plt.show()
