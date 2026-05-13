@@ -2,17 +2,25 @@ import pandas as pd
 from find_interactions import find_interactions_func
 from statsmodels.api import OLS, add_constant
 
-def create_residualized_interactions(df):
+def create_residualized_interactions(df, squared, absolute):
     """
     Forms pairwise interactions by residualization.
     Requires the DataFrame to have columns with "_spend" in their names and for there to be no zero spend columns.
 
     Args:
         df (pandas.DataFrame): The input DataFrame.
+        squared (bool): Whether to use squared values for the interaction terms.
+        absolute (bool): Whether to use absolute values for the interaction terms.
 
     Returns:
         pandas.DataFrame: The input DataFrame appended with residualized interactions.
     """
+    if squared and absolute:
+        raise ValueError("Only one of squared or absolute can be True.")
+    
+    if not squared and not absolute:
+        raise ValueError("One of squared or absolute must be True.")
+
     interactions = find_interactions_func(df)
     residualized = df.copy()
 
@@ -36,7 +44,7 @@ def create_residualized_interactions(df):
         # Avoid accidental overwrite (optional but safer)
         if col_name in residualized.columns:
             continue
-
-        residualized[col_name] = model.resid
+        
+        residualized[col_name] = (model.resid)**2 if squared else abs(model.resid)
 
     return residualized
